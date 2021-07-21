@@ -20,10 +20,22 @@ class Customer(db.Model):
     last_update = db.Column(db.Integer)
 
 
+class Address(db.Model):
+    __tablename__ = "address"
+    address_id = db.Column(db.Integer, primary_key=True)
+    address = db.Column(db.String())
+    address2 = db.Column(db.String())
+    district = db.Column(db.String())
+    postal_code = db.Column(db.String())
+    phone = db.Column(db.String())
+    last_update = db.Column(db.Integer)
+
+
 @app.route("/")
 def hello_world():
     customer = Customer.query.first()
-    print(customer)
+    address = Address.query.first()
+    print(customer, address)
     return "<p>Hello, World!</p>"
 
 
