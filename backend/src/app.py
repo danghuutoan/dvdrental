@@ -11,15 +11,17 @@ def create_app():
     ] = "postgresql://postgres:root@localhost:5432/dvdrental"
     db.init_app(app)
 
-    from models import Customer, Address, City, Country
+    from models import Customer, Address, City, Country, Store, Staff
 
     @app.route("/")
     def hello_world():
         customer = Customer.query.first()
         address = Address.query.first()
         city = City.query.first()
+        store = Store.query.first()
+        staff = Staff.query.first()
         country = Country.query.first()
-        print(customer, address, city, country)
+        print(customer, address, city, country, store, staff)
         print(city.country_id)
         return "<p>Hello, World!</p>"
 

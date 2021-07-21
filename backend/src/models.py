@@ -14,6 +14,7 @@ class Customer(db.Model):
     create_date = db.Column(db.Date)
     last_update = db.Column(db.Integer)
     address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
+    active = db.Column(db.Integer)
 
 
 class Address(db.Model):
@@ -41,3 +42,26 @@ class Country(db.Model):
     country_id = db.Column(db.Integer, primary_key=True)
     country = db.Column(db.String())
     last_update = db.Column(db.Integer)
+
+
+class Store(db.Model):
+    __tablename__ = "store"
+    store_id = db.Column(db.Integer, primary_key=True)
+    address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
+    last_update = db.Column(db.Integer)
+    manager_staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"))
+
+
+class Staff(db.Model):
+    __tablename__ = "staff"
+    staff_id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String())
+    last_name = db.Column(db.String())
+    address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
+    email = db.Column(db.String())
+    store_id = db.Column(db.Integer, db.ForeignKey("store.id"))
+    active = db.Column(db.Integer)
+    username = db.Column(db.String())
+    password = db.Column(db.String())
+    last_update = db.Column(db.Integer)
+    picture = db.Column(db.LargeBinary)
