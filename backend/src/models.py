@@ -136,12 +136,14 @@ class Film(db.Model):
 
 
 class FilmCategory(db.Model):
+    __tablename__ = "film_category"
     film_id = db.Column(db.Integer, primary_key=True)
     category_id = db.Column(db.Integer, primary_key=True)
     last_update = db.Column(db.DateTime)
 
 
 class Category(db.Model):
+    __tablename__ = "category"
     category_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     last_update = db.Column(db.DateTime)
