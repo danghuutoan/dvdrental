@@ -19,6 +19,8 @@ def create_app():
         Store,
         Staff,
         Inventory,
+        Payment,
+        Film,
     )
 
     @app.route("/")
@@ -30,8 +32,10 @@ def create_app():
         staff = Staff.query.first()
         country = Country.query.first()
         inventory = Inventory.query.first()
+        payment = Payment.query.first()
+        film = Film.query.first()
         print(customer, address, city, country, store, staff, inventory)
-        print(city.country_id)
+        print(film.fulltext)
         return "<p>Hello, World!</p>"
 
     return app
