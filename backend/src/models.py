@@ -65,3 +65,11 @@ class Staff(db.Model):
     password = db.Column(db.String())
     last_update = db.Column(db.Integer)
     picture = db.Column(db.LargeBinary)
+
+
+class Inventory(db.Model):
+    __tablename__ = "inventory"
+    inventory_id = db.Column(db.Integer, primary_key=True)
+    film_id = db.Column(db.Integer, db.ForeignKey("film.id"))
+    store_id = db.Column(db.Integer, db.ForeignKey("store.id"))
+    last_update = db.Column(db.Integer)
