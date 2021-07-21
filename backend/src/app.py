@@ -31,11 +31,27 @@ class Address(db.Model):
     last_update = db.Column(db.Integer)
 
 
+class City(db.Model):
+    __tablename__ = "city"
+    city_id = db.Column(db.Integer, primary_key=True)
+    city = db.Column(db.String())
+    last_update = db.Column(db.Integer)
+
+
+class Country(db.Model):
+    __tablename__ = "country"
+    country_id = db.Column(db.Integer, primary_key=True)
+    country = db.Column(db.String())
+    last_update = db.Column(db.Integer)
+
+
 @app.route("/")
 def hello_world():
     customer = Customer.query.first()
     address = Address.query.first()
-    print(customer, address)
+    city = City.query.first()
+    country = Country.query.first()
+    print(customer, address, city, country)
     return "<p>Hello, World!</p>"
 
 
