@@ -18,6 +18,7 @@ class Customer(db.Model):
     activebool = db.Column(db.Boolean)
     create_date = db.Column(db.Date)
     last_update = db.Column(db.Integer)
+    address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
 
 
 class Address(db.Model):
@@ -29,6 +30,7 @@ class Address(db.Model):
     postal_code = db.Column(db.String())
     phone = db.Column(db.String())
     last_update = db.Column(db.Integer)
+    city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
 
 
 class City(db.Model):
@@ -36,6 +38,7 @@ class City(db.Model):
     city_id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String())
     last_update = db.Column(db.Integer)
+    country_id = db.Column(db.Integer, db.ForeignKey("country.id"))
 
 
 class Country(db.Model):
@@ -52,6 +55,7 @@ def hello_world():
     city = City.query.first()
     country = Country.query.first()
     print(customer, address, city, country)
+    print(city.country_id)
     return "<p>Hello, World!</p>"
 
 
