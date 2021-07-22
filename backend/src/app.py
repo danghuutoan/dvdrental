@@ -2,17 +2,7 @@ from flask import Flask, jsonify
 from flask import request
 from flask_migrate import Migrate
 from models import setup_db
-from models import (
-    Customer,
-    Address,
-    City,
-    Country,
-    Store,
-    Staff,
-    Inventory,
-    Payment,
-    Film,
-)
+from models import Film
 
 
 def create_app():
