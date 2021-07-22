@@ -26,7 +26,7 @@ class Customer(db.Model, ModelMixin):
     activebool = db.Column(db.Boolean)
     create_date = db.Column(db.Date)
     last_update = db.Column(db.DateTime)
-    address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
+    address_id = db.Column(db.Integer, db.ForeignKey("address.address_id"))
     active = db.Column(db.Integer)
 
 
@@ -39,7 +39,7 @@ class Address(db.Model, ModelMixin):
     postal_code = db.Column(db.String())
     phone = db.Column(db.String())
     last_update = db.Column(db.DateTime)
-    city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
+    city_id = db.Column(db.Integer, db.ForeignKey("city.city_id"))
 
 
 class City(db.Model, ModelMixin):
@@ -47,7 +47,7 @@ class City(db.Model, ModelMixin):
     city_id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String())
     last_update = db.Column(db.DateTime)
-    country_id = db.Column(db.Integer, db.ForeignKey("country.id"))
+    country_id = db.Column(db.Integer, db.ForeignKey("country.country_id"))
 
 
 class Country(db.Model, ModelMixin):
@@ -60,9 +60,9 @@ class Country(db.Model, ModelMixin):
 class Store(db.Model, ModelMixin):
     __tablename__ = "store"
     store_id = db.Column(db.Integer, primary_key=True)
-    address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
+    address_id = db.Column(db.Integer, db.ForeignKey("address.address_id"))
     last_update = db.Column(db.DateTime)
-    manager_staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"))
+    manager_staff_id = db.Column(db.Integer, db.ForeignKey("staff.staff_id"))
 
 
 class Staff(db.Model, ModelMixin):
@@ -70,9 +70,9 @@ class Staff(db.Model, ModelMixin):
     staff_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String())
     last_name = db.Column(db.String())
-    address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
+    address_id = db.Column(db.Integer, db.ForeignKey("address.address_id"))
     email = db.Column(db.String())
-    store_id = db.Column(db.Integer, db.ForeignKey("store.id"))
+    store_id = db.Column(db.Integer, db.ForeignKey("store.store_id"))
     active = db.Column(db.Integer)
     username = db.Column(db.String())
     password = db.Column(db.String())
@@ -83,8 +83,8 @@ class Staff(db.Model, ModelMixin):
 class Inventory(db.Model, ModelMixin):
     __tablename__ = "inventory"
     inventory_id = db.Column(db.Integer, primary_key=True)
-    film_id = db.Column(db.Integer, db.ForeignKey("film.id"))
-    store_id = db.Column(db.Integer, db.ForeignKey("store.id"))
+    film_id = db.Column(db.Integer, db.ForeignKey("film.film_id"))
+    store_id = db.Column(db.Integer, db.ForeignKey("store.store_id"))
     last_update = db.Column(db.DateTime)
 
 
@@ -92,19 +92,21 @@ class Rental(db.Model, ModelMixin):
     __tablename__ = "rental"
     rental_id = db.Column(db.Integer, primary_key=True)
     rental_date = db.Column(db.DateTime)
-    inventory_id = db.Column(db.Integer, db.ForeignKey("inventory.id"))
-    customer_id = db.Column(db.Integer, db.ForeignKey("customer.id"))
+    inventory_id = db.Column(
+        db.Integer, db.ForeignKey("inventory.inventory_id")
+    )
+    customer_id = db.Column(db.Integer, db.ForeignKey("customer.customer_id"))
     return_date = db.Column(db.DateTime)
-    staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"))
+    staff_id = db.Column(db.Integer, db.ForeignKey("staff.staff_id"))
     last_update = db.Column(db.DateTime)
 
 
 class Payment(db.Model, ModelMixin):
     __tablename__ = "payment"
     payment_id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey("customer.id"))
-    staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"))
-    rental_id = db.Column(db.Integer, db.ForeignKey("rental.id"))
+    customer_id = db.Column(db.Integer, db.ForeignKey("customer.customer_id"))
+    staff_id = db.Column(db.Integer, db.ForeignKey("staff.staff_id"))
+    rental_id = db.Column(db.Integer, db.ForeignKey("rental.rental_id"))
     amount = db.Column(db.Numeric(5, 2))
     payment_date = db.Column(db.DateTime)
 
@@ -137,7 +139,7 @@ class Film(db.Model, ModelMixin):
     title = db.Column(db.String())
     description = db.Column(db.Text())
     release_year = db.Column(db.Integer)
-    language_id = db.Column(db.Integer, db.ForeignKey("language.id"))
+    language_id = db.Column(db.Integer, db.ForeignKey("language.language_id"))
     rental_duration = db.Column(db.SmallInteger)
     rental_rate = db.Column(db.Numeric(4, 2))
     length = db.Column(db.SmallInteger)
