@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, jsonify
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -24,19 +25,12 @@ def create_app():
     )
 
     @app.route("/")
-    def hello_world():
-        customer = Customer.query.first()
-        address = Address.query.first()
-        city = City.query.first()
-        store = Store.query.first()
-        staff = Staff.query.first()
-        country = Country.query.first()
-        inventory = Inventory.query.first()
-        payment = Payment.query.first()
-        film = Film.query.first()
-        print(customer, address, city, country, store, staff, inventory)
-        print(film.fulltext)
-        return "<p>Hello, World!</p>"
+    def get_films():
+        films = Film.query.limit(50).all()
+
+        res = [f.as_dict() for f in films]
+
+        return jsonify(res)
 
     return app
 

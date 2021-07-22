@@ -1,8 +1,23 @@
 from app import db
 from sqlalchemy.dialects.postgresql import TSVECTOR
+import decimal
 
 
-class Customer(db.Model):
+class ModelMixin:
+    def as_dict(self):
+        obj_as_dict = {}
+        for c in self.__table__.columns:
+            value = getattr(self, c.name)
+
+            if isinstance(value, decimal.Decimal):
+                value = float(value)
+
+            obj_as_dict[c.name] = value
+
+        return obj_as_dict
+
+
+class Customer(db.Model, ModelMixin):
     __tablename__ = "customer"
     customer_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String())
@@ -15,7 +30,7 @@ class Customer(db.Model):
     active = db.Column(db.Integer)
 
 
-class Address(db.Model):
+class Address(db.Model, ModelMixin):
     __tablename__ = "address"
     address_id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String())
@@ -27,7 +42,7 @@ class Address(db.Model):
     city_id = db.Column(db.Integer, db.ForeignKey("city.id"))
 
 
-class City(db.Model):
+class City(db.Model, ModelMixin):
     __tablename__ = "city"
     city_id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String())
@@ -35,14 +50,14 @@ class City(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey("country.id"))
 
 
-class Country(db.Model):
+class Country(db.Model, ModelMixin):
     __tablename__ = "country"
     country_id = db.Column(db.Integer, primary_key=True)
     country = db.Column(db.String())
     last_update = db.Column(db.DateTime)
 
 
-class Store(db.Model):
+class Store(db.Model, ModelMixin):
     __tablename__ = "store"
     store_id = db.Column(db.Integer, primary_key=True)
     address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
@@ -50,7 +65,7 @@ class Store(db.Model):
     manager_staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"))
 
 
-class Staff(db.Model):
+class Staff(db.Model, ModelMixin):
     __tablename__ = "staff"
     staff_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String())
@@ -65,7 +80,7 @@ class Staff(db.Model):
     picture = db.Column(db.LargeBinary)
 
 
-class Inventory(db.Model):
+class Inventory(db.Model, ModelMixin):
     __tablename__ = "inventory"
     inventory_id = db.Column(db.Integer, primary_key=True)
     film_id = db.Column(db.Integer, db.ForeignKey("film.id"))
@@ -73,7 +88,7 @@ class Inventory(db.Model):
     last_update = db.Column(db.DateTime)
 
 
-class Rental(db.Model):
+class Rental(db.Model, ModelMixin):
     __tablename__ = "rental"
     rental_id = db.Column(db.Integer, primary_key=True)
     rental_date = db.Column(db.DateTime)
@@ -84,7 +99,7 @@ class Rental(db.Model):
     last_update = db.Column(db.DateTime)
 
 
-class Payment(db.Model):
+class Payment(db.Model, ModelMixin):
     __tablename__ = "payment"
     payment_id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey("customer.id"))
@@ -94,7 +109,7 @@ class Payment(db.Model):
     payment_date = db.Column(db.DateTime)
 
 
-class Actor(db.Model):
+class Actor(db.Model, ModelMixin):
     __tablename__ = "actor"
     actor_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String())
@@ -102,21 +117,21 @@ class Actor(db.Model):
     last_update = db.Column(db.DateTime)
 
 
-class FilmActor(db.Model):
+class FilmActor(db.Model, ModelMixin):
     __tablename__ = "film_actor"
     actor_id = db.Column(db.Integer, primary_key=True)
     film_id = db.Column(db.Integer, primary_key=True)
     last_update = db.Column(db.DateTime)
 
 
-class Language(db.Model):
+class Language(db.Model, ModelMixin):
     __tablename__ = "language"
     language_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     last_update = db.Column(db.DateTime)
 
 
-class Film(db.Model):
+class Film(db.Model, ModelMixin):
     __tablename__ = "film"
     film_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String())
@@ -135,14 +150,14 @@ class Film(db.Model):
     fulltext = db.Column(TSVECTOR)
 
 
-class FilmCategory(db.Model):
+class FilmCategory(db.Model, ModelMixin):
     __tablename__ = "film_category"
     film_id = db.Column(db.Integer, primary_key=True)
     category_id = db.Column(db.Integer, primary_key=True)
     last_update = db.Column(db.DateTime)
 
 
-class Category(db.Model):
+class Category(db.Model, ModelMixin):
     __tablename__ = "category"
     category_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
