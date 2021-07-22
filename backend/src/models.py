@@ -1,6 +1,18 @@
-from app import db
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from sqlalchemy.dialects.postgresql import TSVECTOR
 import decimal
+
+db = SQLAlchemy()
+database_path = "postgresql://postgres:root@localhost:5432/dvdrental"
+
+
+def setup_db(app, database_path=database_path):
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.app = app
+    db.init_app(app)
+    return db
 
 
 class ModelMixin:
@@ -27,6 +39,7 @@ class Customer(db.Model, ModelMixin):
     create_date = db.Column(db.Date)
     last_update = db.Column(db.DateTime)
     address_id = db.Column(db.Integer, db.ForeignKey("address.address_id"))
+    store_id = db.Column(db.Integer, db.ForeignKey("store.store_id"))
     active = db.Column(db.Integer)
 
 

@@ -1,39 +1,30 @@
 from flask import Flask, jsonify
 from flask import request
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from flask_migrate import Migrate
+from models import setup_db
+from models import (
+    Customer,
+    Address,
+    City,
+    Country,
+    Store,
+    Staff,
+    Inventory,
+    Payment,
+    Film,
+)
 
 
 def create_app():
     app = Flask(__name__)
-    app.config[
-        "SQLALCHEMY_DATABASE_URI"
-    ] = "postgresql://postgres:root@localhost:5432/dvdrental"
-    db.init_app(app)
 
-    from models import (
-        Customer,
-        Address,
-        City,
-        Country,
-        Store,
-        Staff,
-        Inventory,
-        Payment,
-        Film,
-    )
+    db = setup_db(app)
+    migrate = Migrate(app, db)
 
     @app.route("/films")
     def get_films():
-        page_num = (
-            int(request.args.get("page")) if request.args.get("page") else None
-        )
-        per_page = (
-            int(request.args.get("per_page"))
-            if request.args.get("per_page")
-            else 10
-        )
+        page_num = request.args.get("page", 1, type=int)
+        per_page = request.args.get("per_page", 10, type=int)
 
         films = Film.query.paginate(
             per_page=per_page, page=page_num, error_out=False
@@ -47,7 +38,3 @@ def create_app():
 
     return app
 
-
-if __name__ == "__main__":
-    app = create_app()
-    app.run(host="0.0.0.0")
