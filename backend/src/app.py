@@ -11,8 +11,10 @@ def create_app():
     db = setup_db(app)
     Migrate(app, db)
     import films
+    import customers
 
-    app.register_blueprint(films.bp)
+    app.register_blueprint(films.bp, url_prefix="/films")
+    app.register_blueprint(customers.bp, url_prefix="/customers")
 
     return app
 
